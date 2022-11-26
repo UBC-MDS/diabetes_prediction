@@ -8,7 +8,7 @@ author:
 - name: "Mehdi Naji"
 date: "2022/11/23 (updated: `r Sys.Date()`)"
 always_allow_html: true
-bibliography: "References.bib"
+bibliography: "doc\References.bib"
 output:
     html_document:
     toc: TRUE
