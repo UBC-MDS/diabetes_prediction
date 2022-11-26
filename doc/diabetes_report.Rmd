@@ -2,10 +2,10 @@
 title: "Predicting if a person has diabete based on his health indicators"
 authors: " Flora Ouedraogo </br> Austin Shih </br> Roan Raina </br> Mehdi Naji "
 date: "2022/11/23 (updated: `r Sys.Date()`)"
-always_allow_html: true
 output:
-    html_document:
+   github_document:
     toc: TRUE
+bibliography: diabetes.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -16,13 +16,36 @@ library(kableExtra)
 library(readxl)
 ```
 
-```{r load results}
+```{r load results, include = FALSE}
 cross_val <- read_csv("../results/cross_val_results.csv")
 test_results <- read_csv("../results/final_test_results.csv")
 correlation <- read_excel("../results/correlation.xlsx", sheet = "Sheet1")
 ```
 
-# Summary 
+# Project Overview
+# Introduction
+
+
+# Methods
+
+## Data
+
+The data set used in this project to predict diabetes is taken from the Center for Disease Control and Prevention (CDC), through the Behavioral Risk Factor Surbellance System (BRFSS) for the year of 2015. This dataset is collected annually by the CDC, via a phone survey of over 400,000 Americans on health-related risk behaviours, chronic health conditions, and the use of preventative services. Details of this dataset can be found [here](https://www.cdc.gov/brfss/annual_data/annual_2015.html).
+
+## Analysis
 
 To answer to the study question which is "Given a person's health indicators, can we know if he/she has diabete or not?", we have split the data into test and train and perfomed a transformation only on numeric features.
-We have thereafter attempted to build different classification models using Dummy Classifier, Decision Tree Classifier, K-Neighbors Classifier, SVC  and Logistic Regression.  After looking  at cross-validations from the different models, the SVM and the Logistic Regression models had high recall and f1 scores. The two models were tuned and used on the test data. The f1 score for the tuned SVC was `r test_results[[2,3]]` as opposed to `r test_results[[2,6]]` for the tuned logistic regression. When it comes to the recall scores, the SVC performed `r test_results[[2,4]]` as opposed to `r test_results[[2,4]]` for the logistic regression. The two models are spotting a high proportion of actual positives which is in our case people with diabete.
+We have thereafter attempted to build different classification models using Dummy Classifier, Decision Tree Classifier, K-Neighbors Classifier, SVC  and Logistic Regression. We have used three scoring metrics to evaluate these models mentioned above. These are accuracy, f1 scores and recall.  After performing the cross-validations from the different models, the SVM and the Logistic Regression models had high recall and f1 scores. The two models were tuned and used on the test data. The f1 score for the tuned SVC was `r test_results[[2,3]]` as opposed to `r test_results[[2,6]]` for the tuned logistic regression. When it comes to the recall scores, the SVC performed `r test_results[[2,4]]` as opposed to `r test_results[[2,4]]` for the logistic regression. The two models are spotting a high proportion of actual positives which is in our case people with diabete. 
+
+# Results and Discussion
+
+```{r correlation, echo=FALSE, fig.cap="Figure 1. Distribution of every feature", out.width = '60%'}
+knitr::include_graphics("../results/distribution.png")
+
+```
+
+
+
+# References
+
+
