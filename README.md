@@ -34,6 +34,19 @@ Run the following command to clean the downloaded data:
 ```
 python src/clean.py --in_file="data/raw/LLCP2015.XPT " --out_file="data/clean/LLCP2015_clean.csv"
 ```
+
+
+Run the following command for predictions 
+
+```
+ python predictions.py --clean_data=../data/clean/LLCP2015_cleaned.csv --output_file='../results'
+```
+
+Run the following command to produce the report
+
+```
+Rscript -e "rmarkdown::render('doc/breast_cancer_predict_report.Rmd', output_format = 'github_document')"
+```
 ## The Data Set
 
 The data set used in this project to predict diabetes is taken from the Center for Disease Control and Prevention (CDC), through the Behavioral Risk Factor Surbellance System (BRFSS) for the year of 2015. This dataset is collected annually by the CDC, via a phone survey of over 400,000 Americans on health-related risk behaviours, chronic health conditions, and the use of preventative services. Details of this dataset can be found [here](https://www.cdc.gov/brfss/annual_data/annual_2015.html).
