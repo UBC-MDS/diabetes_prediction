@@ -7,8 +7,7 @@ author:
 - name: "Roan Raina"
 - name: "Mehdi Naji"
 date: "2022/11/23 (updated: `r Sys.Date()`)"
-always_allow_html: true
-bibliography: "doc\References.bib"
+bibliography: "diabetes.bib"
 output:
     html_document:
     toc: TRUE
@@ -26,12 +25,6 @@ library(tidyverse)
 library(knitr)
 library(kableExtra)
 library(readxl)
-```
-
-```{r load results, message = FALSE}
-cross_val <- read_csv("../results/cross_val_results.csv")
-test_results <- read_csv("../results/final_test_results.csv")
-correlation <- read_excel("../results/correlation.xlsx", sheet = "Sheet1")
 ```
 
 # Project Overview
