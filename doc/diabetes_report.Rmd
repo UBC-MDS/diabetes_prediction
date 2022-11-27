@@ -1,8 +1,8 @@
 ---
 title: "Diabetes Prediction"
-subtitle: "Predicting if a person has diabete based on his health indicators"
+subtitle: "Predicting if a person has diabetes or not"
 author: 
-- name: " Flora Ouedraogo"
+- name: "Flora Ouedraogo"
 - name: "Austin Shih"
 - name: "Roan Raina"
 - name: "Mehdi Naji"
@@ -11,14 +11,8 @@ date: "2022/11/23 (updated: `r Sys.Date()`)"
 output:
    github_document:
     toc: TRUE
-bibliography: diabetes.bib
+bibliography: references.bib
 ---
-
-<style>
-body {
-fontsize: 24pt
-text-align: justify}
-</style>
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
@@ -28,17 +22,27 @@ library(kableExtra)
 library(readxl)
 ```
 
+```{r load results, include = FALSE}
+cross_val <- read_csv("../results/cross_val_results.csv")
+test_results <- read_csv("../results/final_test_results.csv")
+correlation <- read_excel("../results/correlation.xlsx", sheet = "Sheet1")
+```
+
 # Project Overview
-The prevalence and risk of diabetes are threatening us from all around the world. Various factors, including lifestyle, diet, and health information can facilitate diagnoses of this disease. Due to the advancements in data availability, modern data analysis techniques can be employed to speed up and improve the accuracy of disease diagnosis. In this report, we discuss our first attempt at predicting the diagnosis of diabetes, based on standard machine learning methods. 
-It is worth noting that this project is not an original scientific research, and its results cannot be practically used or generalized. This is simply teamwork to cultivate what we have learned in the MDS program at UBC. 
+
+The prevalence and risk of diabetes is a major health concern to everyone around the world. Various factors, including lifestyle, diet, and health information can facilitate diagnoses of this disease. Due to the advancements in data availability, modern data analysis techniques can be employed to speed up and improve the accuracy of disease diagnosis. In this report, we discuss our first attempt at predicting the diagnosis of diabetes, based on standard machine learning methods. It is worth noting that this project is not an original scientific research, and its results cannot be practically used or generalized. This is simply teamwork to cultivate what we have learned in the MDS program at UBC.
 
 # Introduction
-Diabetes is a collection of metabolic diseases caused by persistently elevated blood sugar levels. Frequent urination, increased thirst, and increased appetite are common symptoms. Diabetes can lead to a wide range of health issues if neglected. Cardiovascular disease, stroke, chronic kidney disease, foot ulcers, eye damage, nerve damage, and cognitive impairment are examples of serious long-term consequences.
-Diabetes is the seventh major cause of death in the world[@{2020top}]. It can simply double the risk of early death in people[@{2022Diabetes}]. According to the CDC’s National Diabetes Statistics Report for 2020, 34.2 million people (around 10.5% of the U.S. population) have diabetes in the United States. Among this amount of people about 7.3% have not yet been diagnosed [@{Home}]. Diabetes Canada delivers an alarming message regarding a similar situation in Canda: *"The new diabetes figures show a steady, continued increase in diabetes in our country with 11.7 million Canadians living with diabetes or prediabetes"* [@{Canada}].
 
-The below table shows an estimation prevelance and cost of diabetes in British Columbia. 
+Diabetes is a collection of metabolic diseases caused by persistently elevated blood sugar levels. Frequent urination, increased thirst, and increased appetite are common symptoms. Diabetes can lead to a wide range of health issues if neglected. Cardiovascular disease, stroke, chronic kidney disease, foot ulcers, eye damage, nerve damage, and cognitive impairment are examples of serious long-term consequences. Diabetes is the seventh major cause of death in the world[@2020top]. It can simply double the risk of early death in people[@2022Diabetes]. According to the CDC's National Diabetes Statistics Report for 2020, 34.2 million people (around 10.5% of the U.S. population) have diabetes in the United States. Among this amount of people about 7.3% have not yet been diagnosed [@Home]. Diabetes Canada delivers an alarming message regarding a similar situation in Canada: *"The new diabetes figures show a steady, continued increase in diabetes in our country with 11.7 million Canadians living with diabetes or prediabetes"* [@Canada].
 
-```{r table1, echo=FALSE, message=FALSE ,warnings=FALSE, results='asis'}
+The EDA and prediction scripts uses the Python Programming language [@python]. EDA was conducted using the Pandas package [@pandas] along with Altair package [@altair]. The machine-learning models use the Scikit-learn package [@sklearn]. The code used to perform the analysis and create this report can be found [here](https://github.com/UBC-MDS/diabetes_prediction/tree/main/src).
+
+The R programming language [@R] and the following R packages were used for this report: knitr [@knitr].
+
+The below table shows an estimation prevalence and cost of diabetes in British Columbia.
+
+```{r Table 1, echo=FALSE, message=FALSE ,warnings=FALSE, results='asis'}
 
 tabl <- "
 |Prevalence | 2022 | 2023 |
@@ -62,9 +66,9 @@ Sourse: Diabetes Canada [@{Diabetes}]
 cat(tabl) 
 ```
 
-According to the National Diabetes Statistics Report in 2020, during the period of 1999-2016 the age-adjusted prevalence of total diabetes have been increasing among adults 18 years or older. However, there is no significant changes reported in undiagnosed diabetes prevalence. 
+According to the National Diabetes Statistics Report in 2020, during the period of 1999-2016 the age-adjusted prevalence of total diabetes have been increasing among adults 18 years or older. However, there is no significant changes reported in undiagnosed diabetes prevalence.
 
-```{r table2, echo=FALSE, message=FALSE ,warnings=FALSE, results='asis'}
+```{r Table 2, echo=FALSE, message=FALSE ,warnings=FALSE, results='asis'}
 tabl <- "
 |Time Perion | Diagnosed diabetes <br> percentage (95% CI) | Undiagnosed diabetes <br> percentage (95% CI) | Total diabetes <br> percentage (95% CI) |
 |:----------------|:------------------:|:----------------:|:---------------:|
@@ -77,98 +81,91 @@ tabl <- "
 |2011-2014| 8.7(8.1-9.4)| 2.7(2.3-3.3)| 11.5(10.7-12.3)|
 |2013-2016| 9.4(8.6-10.2)|2.6(2.2-3.1)| 12.0(11.1-12.9)|
 
-Table2: Trends in age-adjusted prevalence of diagnosed, undiagnosed, and total diabetes among adults aged 18 years or older, United States, 1999-2016 <br>
+Table 2: Trends in age-adjusted prevalence of diagnosed, undiagnosed, and total diabetes among adults aged 18 years or older, United States, 1999-2016 <br>
 Sourse: Diabetes Canada [@{nhns}]
 
 "
 cat(tabl)
 ```
 
-# Problem Statement and Methodology
+# Methods
 
-The goal of this project is to create 5 competing machine-learning models and compare their performance in predicting whether a person has diabetes. 
+## Problem Statement and Methodology
 
-* Dummy
-* Decision Tree
-* KNN
-* RBF SVM
-* Logistic Regression
+The goal of this project is to create 5 machine-learning models and compare their performance in predicting whether a person has diabetes. The best two models will then be used to predict the test data set. The models used are the following (with `DummyRegressor` as the baseline model):
 
-# The process steps are the following:
-* Downloading, cleaning, and preprocessing the CDC’s BRFSS data.
-* Splitting and tran,.sforming the data
-* Creating and training five above-mentioned classifier models. 
-* Cross-validating and hyperparameter optimisation of the models.
-* Report the performance results of the models based on their best hyperparameters.
+-   Dummy
+-   Decision Tree
+-   KNN
+-   RBF SVM
+-   Logistic Regression
 
-#  Discussion
-Firstly, let's look at the distributions of the features and target to get a better understanding of the data set. From the distribution of all features, it is immediately apparent that there is a significant class imbalance skewed towards individuals with no diabetes. Condsidering we are interested in predicting diabetes and not overly concerned with false positives, we need to focus on a model that prioritizes `recall` score. The graph below, illustrates the distribution of all features we have in data: 
-```{r predictor-distributions, echo=FALSE, fig.cap="Figure 1. Comparison of the empirical distributions of people in the situation of diabetes, prediabetes, and with no diabetes.", out.width = '100%'}
+## Data
+
+The data set used in this project to predict diabetes is taken from the Center for Disease Control and Prevention (CDC), through the Behavioral Risk Factor Surveillance System (BRFSS) for the year of 2015. This data set is collected annually by the CDC, via a phone survey of over 400,000 Americans on health-related risk behaviours, chronic health conditions, and the use of preventative services. Details of this data set can be found [here](https://www.cdc.gov/brfss/annual_data/annual_2015.html).
+
+## Analysis
+
+To answer the study question: "Given a person's health indicators, can we know if he/she has diabetes or not?", we will prioritize `recall` and `f1` scores in our models to minimize false positives. The data is first split into test and train data sets and performed feature transformation on numeric features. We then build different classification models using `Dummy Classifier`, `Decision Tree Classifier`, `K-Neighbors Classifier`, `SVC` and `Logistic Regression` and cross validated with three scoring metrics, `accuracy`, `f1`, and `recall`, to evaluate these models. After performing cross-validations, the two best models, `SVM` and the `Logistic Regression` were chosen for further hyperparameter tuning due to their high `recall` and `f1` scores. Finally, we will take the best performing two models to conduct predictions of our test set.
+
+*note: for the purpose of this project we will be taking a random sample of 1,000 examples for the analysis due to the immense time and computational power required to run all models on the full data set.*
+
+## The process steps are the following:
+
+1.  Download, clean, and pre-processing the CDC's BRFSS data.
+2.  Split data into train and test data sets at a ratio of 8:2
+3.  Create and train classifier models.
+4.  Cross-validate all models
+5.  Hyperparameter optimization of the two best models.
+6.  Report the performance results of the models based on their best hyperparameters.
+7.  Use best models on test data set and report score.
+
+# Results & Discussion
+
+## EDA
+
+Firstly, let's look at the distributions of the features and target to get a better understanding of the data set. From the distribution of all features, it is immediately apparent that there is a significant class imbalance skewed towards individuals with no diabetes. Considering we are interested in predicting diabetes and not overly concerned with false positives, we need to focus on a model that prioritizes `recall` score. The graph below, illustrates the distribution of all features we have in data:
+
+```{r predictor-distributions, echo=FALSE, fig.cap="Figure 1. Feature Distributions.", out.width = '100%'}
 knitr::include_graphics("../results/distribution.png")
-``` 
+```
 
 The below graphs may help to look deeper:
 
 As it is illustrative in Figure 2, there is significant distinction between the BMI-score distribution of the people with no diabetes and the people who have diabetes or in the pre-diabetes condition.
-```{r bmi, echo=FALSE, fig.align = 'center', fig.cap="Figure 2. Comparison of the BMI distribution of people in the situation of diabetes, prediabetes, and with no diabetes.", out.width = '50%'}
+
+```{r bmi, echo=FALSE, fig.align = 'center', fig.cap="Figure 2. Comparison of the BMI distribution of people with diabetes, prediabetes, and no diabetes.", out.width = '50%'}
 knitr::include_graphics("../results/bmi.png")
-``` 
+```
 
-The age distribution of these three group of people, shown in figure 3, indicates that the incidence probabilty of this disease in low-age is low. In other words, the age distribution of people with diabetes is more skewed to left than the age distribution of people with no diabetes. This evidence tells us that the feature of age can be crucial in this study.  
-```{r age, echo=FALSE, fig.align = 'center', fig.cap="Figure 3. Comparison of the age distribution of people in the situation of diabetes ", out.width = '50%'}
+The age distribution of these three group of people, shown in figure 3, indicates that the incidence probability of this disease in low-age is low. In other words, the age distribution of people with diabetes is more skewed to left than the age distribution of people with no diabetes. This evidence tells us that the feature of age can be crucial in this study.
+
+```{r age, echo=FALSE, fig.align = 'center', fig.cap="Figure 3. Comparison of the age distribution of people with diabetes, prediabetes, and no diabetes.", out.width = '50%'}
 knitr::include_graphics("../results/age.png")
-``` 
+```
 
-The below graph shows that as the education level of people in this study increases it is less likely to have diabetes. 
-```{r education, echo=FALSE, fig.align = 'center', fig.cap="Figure 4. Comparison of the education distribution of people in the situation of diabetes", out.width = '50%'}
+The below graph shows that as the education level of people in this study increases it is less likely to have diabetes.
+
+```{r education, echo=FALSE, fig.align = 'center', fig.cap="Figure 4. Comparison of the education distribution of people with diabetes, prediabetes, and no diabetes.", out.width = '50%'}
 knitr::include_graphics("../results/education.png")
-``` 
+```
 
 In addition, there seems to be a negative relationship between income level and the incidence of diabetes.
-```{r income, echo=FALSE, fig.align = 'center', fig.cap="Figure 5. Comparison of the education distribution of people in the situation of diabetes", out.width = '50%'}
+
+```{r income, echo=FALSE, fig.align = 'center', fig.cap="Figure 5. Comparison of the education distribution of people with diabetes, prediabetes, and no diabetes.", out.width = '50%'}
 knitr::include_graphics("../results/income.png")
-``` 
-
-# Summary 
-
-To answer to the study question which is "Given a person's health indicators, can we know if he/she has diabete or not?", we have split the data into test and train and perfomed a transformation only on numeric features.
-We have thereafter attempted to build different classification models using Dummy Classifier, Decision Tree Classifier, K-Neighbors Classifier, SVC  and Logistic Regression.  After looking  at cross-validations from the different models, the SVM and the Logistic Regression models had high recall and f1 scores. The two models were tuned and used on the test data. The f1 score for the tuned SVC was `r test_results[[2,3]]` as opposed to `r test_results[[2,6]]` for the tuned logistic regression. When it comes to the recall scores, the SVC performed `r test_results[[2,4]]` as opposed to `r test_results[[2,4]]` for the logistic regression. The two models are spotting a high proportion of actual positives which is in our case people with diabete.
-
-
-
-# References
-
-```{r load results, include = FALSE}
-cross_val <- read_csv("../results/cross_val_results.csv")
-test_results <- read_csv("../results/final_test_results.csv")
-correlation <- read_excel("../results/correlation.xlsx", sheet = "Sheet1")
 ```
 
-# Project Overview
-# Introduction
+## Results
 
+::: {align="center"}
 
-# Methods
-
-## Data
-
-The data set used in this project to predict diabetes is taken from the Center for Disease Control and Prevention (CDC), through the Behavioral Risk Factor Surbellance System (BRFSS) for the year of 2015. This dataset is collected annually by the CDC, via a phone survey of over 400,000 Americans on health-related risk behaviours, chronic health conditions, and the use of preventative services. Details of this dataset can be found [here](https://www.cdc.gov/brfss/annual_data/annual_2015.html).
-
-## Analysis
-
-To answer to the study question which is "Given a person's health indicators, can we know if he/she has diabete or not?", we have split the data into test and train and perfomed a transformation only on numeric features.
-We have thereafter attempted to build different classification models using Dummy Classifier, Decision Tree Classifier, K-Neighbors Classifier, SVC  and Logistic Regression. We have used three scoring metrics to evaluate these models mentioned above. These are accuracy, f1 scores and recall.  After performing the cross-validations from the different models, the SVM and the Logistic Regression models had high recall and f1 scores. The two models were tuned and used on the test data. The f1 score for the tuned SVC was `r test_results[[2,3]]` as opposed to `r test_results[[2,6]]` for the tuned logistic regression. When it comes to the recall scores, the SVC performed `r test_results[[2,4]]` as opposed to `r test_results[[2,4]]` for the logistic regression. The two models are spotting a high proportion of actual positives which is in our case people with diabete. 
-
-# Results and Discussion
-
-```{r correlation, echo=FALSE, fig.cap="Figure 1. Distribution of every feature", out.width = '60%'}
-knitr::include_graphics("../results/distribution.png")
-
+```{r final results, echo=FALSE}
+knitr::kable(test_results, caption = "Table 3. Final Best Model Score on Test Data")
 ```
 
+The f1 score for the tuned SVC model was `r test_results[[2,3]]` as opposed to `r test_results[[2,6]]` for the tuned logistic regression. When it comes to the recall scores, the SVC score was `r test_results[[2,4]]` compared to the `r test_results[[2,4]]` for logistic regression. The two models have the highest recall scores which limits the false positives in predictions.
 
+Further analysis can be done by incorporating additional features from the BRFSS along with feature engineering and feature selection. Our prediction scores are by no means good for real life predictions but is a good starting point and validation that this type of prediction model can be useful to aid health professionals and high risk individuals to prevent and minimize the risk of diabetes.
 
 # References
-
-
-
