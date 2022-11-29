@@ -31,7 +31,7 @@ python src/download_data.py --url=https://www.cdc.gov/brfss/annual_data/2015/fil
 Run the following command to clean the downloaded data:
 
 ```
-python src/clean.py --in_file="data/raw/LLCP2015.XPT " --out_file="data/clean/LLCP2015_clean.csv"
+python src/clean.py --in_file="data/raw/LLCP2015.XPT " --out_file="data/clean/LLCP2015_cleaned.csv"
 ```
 
 
@@ -44,7 +44,7 @@ Run the following command for predictions
 Run the following command to produce the report
 
 ```
-Rscript -e "rmarkdown::render('doc/breast_cancer_predict_report.Rmd', output_format = 'github_document')"
+Rscript -e "rmarkdown::render('doc/diabetes_report.Rmd', output_format = 'github_document')"
 ```
 
 ## Report
