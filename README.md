@@ -38,7 +38,7 @@ python src/clean.py --in_file="data/raw/LLCP2015.XPT " --out_file="data/clean/LL
 Run the following command for predictions 
 
 ```
- python predictions.py --clean_data=../data/clean/LLCP2015_cleaned.csv --output_file='../results'
+ python predictions.py --clean_data=data/clean/LLCP2015_cleaned.csv --output_file='results'
 ```
 
 Run the following command to produce the report
