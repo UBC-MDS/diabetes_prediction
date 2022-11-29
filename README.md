@@ -34,11 +34,16 @@ Run the following command to clean the downloaded data:
 python src/clean.py --in_file="data/raw/LLCP2015.XPT " --out_file="data/clean/LLCP2015_cleaned.csv"
 ```
 
+Run the following command to generate EDA results:
+
+```
+ python src/diabetes_eda.py --clean_data=data/clean/LLCP2015_cleaned.csv --output_file='results'
+```
 
 Run the following command for predictions 
 
 ```
- python predictions.py --clean_data=data/clean/LLCP2015_cleaned.csv --output_file='results'
+ python src/predictions.py --clean_data=data/clean/LLCP2015_cleaned.csv --output_file='results'
 ```
 
 Run the following command to produce the report
