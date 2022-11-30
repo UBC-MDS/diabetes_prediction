@@ -22,7 +22,7 @@ Given an individual's risk factors can we predict if they have diabetes?
 
 To replicate the analysis, clone this GitHub repository, install the [dependencies](#dependencies) listed below, and:
 
-run the following command at the command line/terminal from the root directory of this project:
+run the following command in the terminal from the root directory of this project:
 
 ```
 make all
@@ -30,7 +30,7 @@ make all
 
 To clean the data and results generated: 
 
-run the following command at the command line/terminal from the root directory of this project:
+run the following command in terminal from the root directory of this project:
 
 ```
 make clean
