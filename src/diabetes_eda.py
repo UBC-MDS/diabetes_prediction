@@ -9,11 +9,12 @@ Options:
 --clean_data=<clean_data>       Relative path of cleaned dataset 
 --output_file=<output_file>     Relative path to output file directory
 """
-# python diabetes_eda.py --clean_data=../data/clean/LLCP2015_cleaned.csv --output_file='../results'
+# python src/diabetes_eda.py --clean_data=data/clean/LLCP2015_cleaned.csv --output_file='results'
 
 # Imports 
 from docopt import docopt
 import pandas as pd
+import numpy as np
 import altair as alt
 from altair_saver import save
 import os
@@ -36,6 +37,9 @@ def main(clean_data, output_file):
     except FileNotFoundError:
         print("Input csv file of train set does not exist.")
         os._exit()
+
+    # add additional identifier column
+    df['Diabetes'] = np.where(df['Diabetes_012'] == 0.0, "no diabetes", np.where(df['Diabetes_012'] == 1.0, "prediabetes", "diebetes"))
 
     # Distributions of complete data set
     df_cols = df.columns.tolist()
@@ -74,17 +78,15 @@ def main(clean_data, output_file):
         print(type(fx))
     
     # Age distributions of different class of diabetes
-    age_dist = (alt.Chart(df)
-                   .transform_density(
-                        'Age',
-                        groupby=['Diabetes'],
-                        as_=['Age', 'density'])
-                    .mark_area(opacity=0.4).encode(
-                        x='Age',
-                        y='density:Q',
-                        color=alt.Color(
-                            'Diabetes', 
-                            scale=alt.Scale(scheme='set1'))))
+    age_dist = alt.Chart(df
+    ).transform_density(
+        'Age',
+        groupby=['Diabetes'],
+        as_=['Age', 'density']
+    ).mark_area(opacity=0.4).encode(
+        x='Age',
+        y='density:Q',
+        color=alt.Color('Diabetes', scale=alt.Scale(scheme='set1')))
     
     # save age distribution plot
     try:
@@ -97,7 +99,7 @@ def main(clean_data, output_file):
         
     # BMI distributions of different class of diabetes
     bmi_dist = (alt.Chart(df)
-                   .transform_density(
+                    .transform_density(
                         'BMI',
                         groupby=['Diabetes'],
                         as_=['BMI', 'density'])
@@ -119,7 +121,7 @@ def main(clean_data, output_file):
     
     # Income distributions of different class of diabetes
     income_dist = (alt.Chart(df)
-                   .transform_density(
+                    .transform_density(
                         'Income',
                         groupby=['Diabetes'],
                         as_=['Income', 'density'])
@@ -142,7 +144,7 @@ def main(clean_data, output_file):
         
     # Education distributions of different class of diabetes
     education_dist = (alt.Chart(df)
-                   .transform_density(
+                    .transform_density(
                         'Education',
                         groupby=['Diabetes'],
                         as_=['Education', 'density'])
