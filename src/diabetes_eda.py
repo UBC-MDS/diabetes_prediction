@@ -130,6 +130,7 @@ def main(clean_data, output_file):
                             'Diabetes', 
                             scale=alt.Scale(scheme='set1'))))
     
+
     # save income distribution plot
     try:
         income_dist.save(output_file + '/' +'income.png')
