@@ -72,6 +72,95 @@ def main(clean_data, output_file):
         print("Error in target file path")
         print(fx)
         print(type(fx))
+    
+    # Age distributions of different class of diabetes
+    age_dist = (alt.Chart(df)
+                   .transform_density(
+                        'Age',
+                        groupby=['Diabetes'],
+                        as_=['Age', 'density'])
+                    .mark_area(opacity=0.4).encode(
+                        x='Age',
+                        y='density:Q',
+                        color=alt.Color(
+                            'Diabetes', 
+                            scale=alt.Scale(scheme='set1'))))
+    
+    # save age distribution plot
+    try:
+        age_dist.save(output_file + '/' +'age.png')
+        print("age distribution plot generation complete")
+    except FileNotFoundError as fx:
+        print("Error in target file path")
+        print(fx)
+        print(type(fx))
+        
+    # BMI distributions of different class of diabetes
+    bmi_dist = (alt.Chart(df)
+                   .transform_density(
+                        'BMI',
+                        groupby=['Diabetes'],
+                        as_=['BMI', 'density'])
+                    .mark_area(opacity=0.4).encode(
+                        x='BMI',
+                        y='density:Q',
+                        color=alt.Color(
+                            'Diabetes', 
+                            scale=alt.Scale(scheme='set1'))))
+    
+    # save bmi distribution plot
+    try:
+        bmi_dist.save(output_file + '/' +'bmi.png')
+        print("bmi distribution plot generation complete")
+    except FileNotFoundError as fx:
+        print("Error in target file path")
+        print(fx)
+        print(type(fx)) 
+    
+    # Income distributions of different class of diabetes
+    income_dist = (alt.Chart(df)
+                   .transform_density(
+                        'Income',
+                        groupby=['Diabetes'],
+                        as_=['Income', 'density'])
+                    .mark_area(opacity=0.4).encode(
+                        x='Income',
+                        y='density:Q',
+                        color=alt.Color(
+                            'Diabetes', 
+                            scale=alt.Scale(scheme='set1'))))
+    
 
+    # save income distribution plot
+    try:
+        income_dist.save(output_file + '/' +'income.png')
+        print("income distribution plot generation complete")
+    except FileNotFoundError as fx:
+        print("Error in target file path")
+        print(fx)
+        print(type(fx))   
+        
+    # Education distributions of different class of diabetes
+    education_dist = (alt.Chart(df)
+                   .transform_density(
+                        'Education',
+                        groupby=['Diabetes'],
+                        as_=['Education', 'density'])
+                    .mark_area(opacity=0.4).encode(
+                        x='Education',
+                        y='density:Q',
+                        color=alt.Color(
+                            'Diabetes', 
+                            scale=alt.Scale(scheme='set1'))))
+    
+    # save education distribution plot
+    try:
+        education_dist.save(output_file + '/' +'education.png')
+        print("education distribution plot generation complete")
+    except FileNotFoundError as fx:
+        print("Error in target file path")
+        print(fx)
+        print(type(fx))   
+    
 if __name__ == "__main__":
     main(opt["--clean_data"], opt["--output_file"])
