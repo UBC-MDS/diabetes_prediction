@@ -22,34 +22,18 @@ Given an individual's risk factors can we predict if they have diabetes?
 
 To replicate the analysis, clone this GitHub repository, install the [dependencies](#dependencies) listed below, and:
 
-
-Run the following command to download the data:
-```
-python src/download_data.py --url=https://www.cdc.gov/brfss/annual_data/2015/files/LLCP2015XPT.zip --out_dir=data/raw
-```
-
-Run the following command to clean the downloaded data:
+run the following command in the terminal from the root directory of this project:
 
 ```
-python src/clean.py --in_file="data/raw/LLCP2015.XPT " --out_file="data/clean/LLCP2015_cleaned.csv"
+make all
 ```
 
-Run the following command to generate EDA results:
+To clean the data and results generated: 
+
+run the following command in terminal from the root directory of this project:
 
 ```
- python src/diabetes_eda.py --clean_data=data/clean/LLCP2015_cleaned.csv --output_file='results'
-```
-
-Run the following command for predictions 
-
-```
- python src/predictions.py --clean_data=data/clean/LLCP2015_cleaned.csv --output_file='results'
-```
-
-Run the following command to produce the report
-
-```
-Rscript -e "rmarkdown::render('doc/diabetes_report.Rmd', output_format = 'github_document')"
+make clean
 ```
 
 ## Report
