@@ -1,7 +1,7 @@
 Diabetes Prediction
 ================
 truetruetruetrue
-2022/11/23 (updated: 2022-11-26)
+2022/11/23 (updated: 2022-11-30)
 
 - <a href="#project-overview" id="toc-project-overview">Project
   Overview</a>
@@ -136,7 +136,7 @@ found [here](https://www.cdc.gov/brfss/annual_data/annual_2015.html).
 
 To answer the study question: “Given a person’s health indicators, can
 we know if he/she has diabetes or not?”, we will prioritize `recall` and
-`f1` scores in our models to minimize false positives. The data is first
+`f1` scores in our models to minimize false negatives. The data is first
 split into test and train data sets and performed feature transformation
 on numeric features. We then build different classification models using
 `Dummy Classifier`, `Decision Tree Classifier`,
@@ -206,8 +206,6 @@ level and the incidence of diabetes.
 <img src="../results/income.png" alt="Figure 5. Comparison of the education distribution of people with diabetes, prediabetes, and no diabetes." width="50%" style="display: block; margin: auto;" />
 
 ## Results
-
-::: {align=“center”}
 
 <table>
 <caption>
@@ -292,7 +290,7 @@ The f1 score for the tuned SVC model was 0.38 as opposed to 0.391 for
 the tuned logistic regression. When it comes to the recall scores, the
 SVC score was 0.792 compared to the 0.792 for logistic regression. The
 two models have the highest recall scores which limits the false
-positives in predictions.
+negatives in predictions.
 
 Further analysis can be done by incorporating additional features from
 the BRFSS along with feature engineering and feature selection. Our
