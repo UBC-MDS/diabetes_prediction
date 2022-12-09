@@ -117,7 +117,8 @@ knitr::kable(test_results, caption = "Table 3. Final Best Model Score on Test Da
 
 From the above table, we can see that the f1 score for the tuned SVC model is `r test_results[[2,3]]` as opposed to `r test_results[[2,6]]` for the tuned Logistic Regression. We mentioned earlier that we are prioritizing the recall scores for this study. The table shows interesting recall scores. The recall score for the SVC model is `r test_results[[2,4]]` as opposed to the recall score of the logistic Regression which is`r test_results[[2,7]]`. The two models have the highest recall scores which limits the false positives in predictions.
 
+## Limits
 
-Further analysis can be done by incorporating additional features from the BRFSS along with feature engineering and feature selection. Our prediction scores are by no means good for real life predictions but is a good starting point and validation that this type of prediction model can be useful to aid health professionals and high risk individuals to prevent and minimize the risk of diabetes.
+We understand that our study has limitations. Indeed, a further analysis can be done through incorporating additional features from the BRFSS along with feature engineering and feature selection. Our prediction scores are acceptable but for a deployment stage, we would need to improve them as they are not good enogh for deployment. 
 
 # References
