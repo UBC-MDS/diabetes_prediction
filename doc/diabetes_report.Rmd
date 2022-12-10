@@ -7,15 +7,16 @@ author:
 - name: "Roan Raina"
 - name: "Mehdi Naji"
 date: "2022/11/23 (updated: `r Sys.Date()`)"
-
 output:
-   github_document:
+   html_document:
     toc: TRUE
+   github_document:
+    toc: true
 bibliography: references.bib
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(knitr)
 library(kableExtra)
@@ -36,13 +37,11 @@ The prevalence and risk of diabetes is a major health concern to everyone around
 
 Diabetes is a collection of metabolic diseases caused by persistently elevated blood sugar levels. Frequent urination, increased thirst, and increased appetite are common symptoms. Diabetes can lead to a wide range of health issues such as  stroke, foot ulcers, eye damage, nerve damage, and cognitive impairment if neglected. Diabetes is the seventh major cause of death in the world[@2020top]. It can simply double the risk of early death in people[@2022Diabetes]. Diagnose becomes therefore crucial as it will help in adopting a healthy lifestyle which will help avoid its complicated form.
 
-The report of the entire study can be found [here](https://github.com/UBC-MDS/diabetes_prediction/tree/main/src).
-
 # Methods
 
 ## Problem Statement and Methodology
 
-The goal of this project is to create 5 machine-learning models and compare their performance in predicting whether a person has diabetes. The best two models will then be used to predict the test data set. The models used are the following (with `DummyRegressor` as the baseline model):
+The goal of this project is to create 5 machine-learning models and compare their performance in predicting whether a person has diabetes. The best two models will then be used to predict the test data set. The models used are the following (with `DummyClassifier` as the baseline model):
 
 -   Dummy
 -   Decision Tree
@@ -77,9 +76,13 @@ To answer the study question: "Given a person's health indicators, can we know i
 
 Firstly, let's look at the distributions of the features and target to get a better understanding of the data set. From the distribution of all features, it is immediately apparent that there is a significant class imbalance skewed towards individuals with no diabetes. Considering we are interested in predicting diabetes and not overly concerned with false positives, we need to focus on a model that prioritizes `recall` score. The graph below, illustrates the distribution of all features we have in data:
 
-```{r predictor-distributions, echo=FALSE, fig.cap="Figure 1. Feature Distributions.", out.width = '100%'}
+
+```{r distribution, echo=FALSE, fig.cap="Figure 1. Feature Distributions.", out.width = '100%'}
 knitr::include_graphics("../results/distribution.png")
 ```
+
+
+
 
 The below graphs may help to look deeper:
 
@@ -109,10 +112,8 @@ knitr::include_graphics("../results/income.png")
 
 ## Results
 
-::: {align="center"}
-
 ```{r final results, echo=FALSE}
-knitr::kable(test_results, caption = "Table 3. Final Best Model Score on Test Data")
+knitr::kable(test_results, caption = "Table 1. Final Best Model Score on Test Data")
 ```
 
 From the above table, we can see that the f1 score for the tuned SVC model is `r test_results[[2,3]]` as opposed to `r test_results[[2,6]]` for the tuned Logistic Regression. We mentioned earlier that we are prioritizing the recall scores for this study. The table shows interesting recall scores. The recall score for the SVC model is `r test_results[[2,4]]` as opposed to the recall score of the logistic Regression which is`r test_results[[2,7]]`. The two models have the highest recall scores which limits the false positives in predictions.
