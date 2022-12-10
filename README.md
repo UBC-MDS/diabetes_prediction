@@ -38,7 +38,7 @@ make clean
 
 ## Report
 
-The final report can be found [here](https://github.com/UBC-MDS/diabetes_prediction/blob/main/doc/diabetes_report.md)
+The final report can be found [here](https://github.com/UBC-MDS/diabetes_prediction/blob/main/doc/diabetes_report.html)
 
 ## Dependencies
 Python:
