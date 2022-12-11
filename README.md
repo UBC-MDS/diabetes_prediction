@@ -20,6 +20,7 @@ Given an individual's risk factors can we predict if they have diabetes?
 
 ## Usage
 
+### Method 1: (Makefile)
 To replicate the analysis, clone this GitHub repository, install the [dependencies](#dependencies) listed below, and:
 
 run the following command in the terminal from the root directory of this project:
@@ -30,11 +31,33 @@ make all
 
 To clean the data and results generated: 
 
-run the following command in terminal from the root directory of this project:
+Run the following command in terminal from the root directory of this project:
 
 ```
 make clean
 ```
+
+### Method 2: (Docker)
+
+1. Pull Docker image from docker hub:
+```
+docker pull roanraina/diabetes-prediction
+```
+
+2. To replicate the analysis, run the following command at the command line/terminal from the root directory of this project:
+
+    Mac (intel)/Linux: 
+```
+docker run --rm -v /$(pwd):/home/ roanraina/diabetes-prediction:latest make -C /home/ all
+```
+
+3. To reset the repo to a clean state, with no intermediate or results files, run the following command at the command line/terminal from the root directory of this project:
+
+```
+docker run --rm -v /$(pwd):/home/ roanraina/roanraina/diabetes-prediction:latest make -C /home/ clean
+```
+
+Note: For Mac (M1/M2), add `--platform linux/amd64` flag to command
 
 ## Report
 
@@ -58,7 +81,6 @@ Python:
 - `pip`
 - `lightgbm`
 - `docopt`
-- `requests`
 - `openpyxl`
 
 ## License 
