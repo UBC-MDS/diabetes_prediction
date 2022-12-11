@@ -17,6 +17,8 @@ Using the Center for Disease Control and Prevention (CDC) Behavioral Risk Factor
 
 Given an individual's risk factors can we predict if they have diabetes?
 
+## Dependency Diagram of the Makefile
+<img src="doc/makefile-dependancy-dia.png">
 
 ## Usage
 
